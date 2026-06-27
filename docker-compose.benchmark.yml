@@ -1,0 +1,41 @@
+# ==============================================================================
+# SHADOW-Net — Microbenchmark Compose (Paper §V-A)
+# ==============================================================================
+# Runs the benchmark harness under RPi4 SWaP constraints.
+# Results are written to ./results/ on the host via a bind mount.
+#
+# Usage:
+#   docker compose -f docker-compose.benchmark.yml up --build
+# ==============================================================================
+
+services:
+  shadow-benchmark:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shadow-benchmark
+    entrypoint: ["python", "benchmark_harness.py"]
+    command: [
+      "--iterations", "30",
+      "--rows", "4",
+      "--cols", "4",
+      "--csv", "/app/results/benchmark_raw.csv",
+      "--json", "/app/results/benchmark_summary.json"
+    ]
+
+    # ── Raspberry Pi 4 SWaP Emulation ────────────────────────────────────
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 1g
+          pids: 100
+        reservations:
+          memory: 256m
+
+    # Mount results directory to host for data extraction
+    volumes:
+      - ./results:/app/results
+
+    environment:
+      - PYTHONUNBUFFERED=1

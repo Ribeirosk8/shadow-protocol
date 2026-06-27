@@ -1,0 +1,105 @@
+# ==============================================================================
+# SHADOW-Net — SWaP Emulation (Docker Compose)
+# ==============================================================================
+# Paper §V-A Microbenchmark Environment
+#
+# Emulates Raspberry Pi 4 hardware constraints:
+#   - Broadcom BCM2711, Quad-core Cortex-A72 @ 1.5GHz
+#   - 1 GB LPDDR4 RAM (worst-case variant)
+#
+# Three services simulate drones at different SOC tiers to demonstrate the
+# dynamic cryptographic step-down (§IV-A):
+#
+#   shadow-drone-alpha  → SOC 85%  (HIGH-POWER,     64-bit SecInt)
+#   shadow-drone-bravo  → SOC 50%  (MEDIUM-POWER,   48-bit SecInt)
+#   shadow-drone-charlie→ SOC 20%  (CRITICAL-POWER,  40-bit SecInt)
+#
+# Run all three:
+#   docker-compose up --build
+#
+# Run a single tier:
+#   docker-compose up --build shadow-drone-bravo
+# ==============================================================================
+
+services:
+  # ── Drone Alpha — HIGH-POWER State (SOC > 70%) ─────────────────────────
+  shadow-drone-alpha:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shadow-drone-alpha
+    command: ["--soc", "85", "--rows", "4", "--cols", "4"]
+
+    # SWaP constraints — Raspberry Pi 4 emulation
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"       # ≈ single-core equivalent of Pi 4
+          memory: 1g         # 1 GB LPDDR4 (worst-case Pi 4 variant)
+          pids: 100          # Prevent fork-bomb / runaway threads
+        reservations:
+          memory: 256m       # Guaranteed minimum allocation
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SHADOW_DRONE_ID=ALPHA
+      - SHADOW_SOC=85
+
+    networks:
+      - shadow-fanet
+
+  # ── Drone Bravo — MEDIUM-POWER State (30% < SOC ≤ 70%) ────────────────
+  shadow-drone-bravo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shadow-drone-bravo
+    command: ["--soc", "50", "--rows", "4", "--cols", "4"]
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 1g
+          pids: 100
+        reservations:
+          memory: 256m
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SHADOW_DRONE_ID=BRAVO
+      - SHADOW_SOC=50
+
+    networks:
+      - shadow-fanet
+
+  # ── Drone Charlie — CRITICAL-POWER State (SOC ≤ 30%) ──────────────────
+  shadow-drone-charlie:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shadow-drone-charlie
+    command: ["--soc", "20", "--rows", "4", "--cols", "4"]
+
+    deploy:
+      resources:
+        limits:
+          cpus: "0.50"
+          memory: 1g
+          pids: 100
+        reservations:
+          memory: 256m
+
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SHADOW_DRONE_ID=CHARLIE
+      - SHADOW_SOC=20
+
+    networks:
+      - shadow-fanet
+
+# ── Internal FANET bridge network ────────────────────────────────────────────
+networks:
+  shadow-fanet:
+    driver: bridge
+    name: shadow-fanet

@@ -1,0 +1,3 @@
+# SHADOW-Net — Python Dependencies
+# MPyC: Secure Multi-Party Computation framework (Shamir's Secret Sharing)
+mpyc>=0.10

@@ -1,0 +1,54 @@
+{
+  "benchmark": "SHADOW-Net \u00a7V-A Microbenchmark",
+  "environment": "Docker (cpus=0.50, mem=1g) \u2014 RPi4 Emulation",
+  "matrix_size": "4x4",
+  "iterations": 30,
+  "warmup": 3,
+  "tiers": [
+    {
+      "tier": "HIGH-POWER",
+      "label": "SOC > 70%",
+      "soc": 85,
+      "bits": 64,
+      "payload_bytes": 128,
+      "payload_reduction_pct": 0.0,
+      "mean_us": 79.94,
+      "stdev_us": 13.94,
+      "ci95_us": 4.99,
+      "median_us": 77.31,
+      "min_us": 72.88,
+      "max_us": 149.54,
+      "mean_ms": 0.0799
+    },
+    {
+      "tier": "MEDIUM-POWER",
+      "label": "30% < SOC \u2264 70%",
+      "soc": 50,
+      "bits": 48,
+      "payload_bytes": 96,
+      "payload_reduction_pct": 25.0,
+      "mean_us": 74.86,
+      "stdev_us": 2.43,
+      "ci95_us": 0.87,
+      "median_us": 74.0,
+      "min_us": 73.0,
+      "max_us": 85.62,
+      "mean_ms": 0.0749
+    },
+    {
+      "tier": "CRITICAL-POWER",
+      "label": "SOC \u2264 30%",
+      "soc": 20,
+      "bits": 40,
+      "payload_bytes": 80,
+      "payload_reduction_pct": 37.5,
+      "mean_us": 75.29,
+      "stdev_us": 2.84,
+      "ci95_us": 1.02,
+      "median_us": 75.65,
+      "min_us": 71.75,
+      "max_us": 85.83,
+      "mean_ms": 0.0753
+    }
+  ]
+}
