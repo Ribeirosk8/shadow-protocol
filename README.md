@@ -1,4 +1,4 @@
-# 🛡️ SHADOW-Net
+# SHADOW-Net
 
 ### Delay-Aware Dynamic SMPC and Opportunistic Caching in Privacy-Preserving FANETs
 
@@ -13,20 +13,20 @@
 
 ---
 
-## 📋 Abstract
+## Abstract
 
 The rapid integration of Unmanned Aerial Vehicles (UAVs) into urban logistics has raised critical concerns regarding business privacy. Broadcast regulations, such as **Remote ID**, mandate cleartext trajectory sharing, exposing proprietary routing data to competing fleets. While decentralized **Secure Multi-Party Computation (SMPC)** eliminates the Single Point of Failure (SPOF) associated with centralized servers, standard SMPC matrix operations impose severe computational burdens on edge devices.
 
 **SHADOW-Net** proposes a **SWaP-Aware** (Size, Weight, and Power) architecture that:
 
-- 🔋 **Dynamically scales** the cryptographic field size (64 → 48 → 40 bits) based on real-time **State of Charge (SOC)**
-- 📡 **Reduces wireless payload by 37.5%** during critical battery states
-- 🗺️ Integrates **opportunistic Sky Caching** to reduce FANET polling overhead
-- 📻 Applies **probabilistic overhearing mitigation** to conserve radio energy
+- **Dynamically scales** the cryptographic field size (64 → 48 → 40 bits) based on real-time **State of Charge (SOC)**
+- **Reduces wireless payload by 37.5%** during critical battery states
+- Integrates **opportunistic Sky Caching** to reduce FANET polling overhead
+- Applies **probabilistic overhearing mitigation** to conserve radio energy
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -55,7 +55,7 @@ The rapid integration of Unmanned Aerial Vehicles (UAVs) into urban logistics ha
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```
 shadow-protocol/
@@ -83,7 +83,7 @@ shadow-protocol/
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
 ### Prerequisites
 
@@ -136,21 +136,21 @@ docker compose -f docker-compose.benchmark.yml up --build
 
 ---
 
-## 🔬 SWaP-Aware Dynamic Field Scaling (§IV-A)
+## SWaP-Aware Dynamic Field Scaling (§IV-A)
 
 The core innovation: the SMPC secret share bit-width adapts to battery state.
 
 | SOC Tier | Condition | SecInt | Bytes/Cell | Payload Δ |
 |---|---|---|---|---|
-| 🟢 High-Power | SOC > 70% | 64-bit | 8 B | baseline |
-| 🟡 Medium-Power | 30% < SOC ≤ 70% | 48-bit | 6 B | **−25.0%** |
-| 🔴 Critical-Power | SOC ≤ 30% | 40-bit | 5 B | **−37.5%** |
+| High-Power | SOC > 70% | 64-bit | 8 B | baseline |
+| Medium-Power | 30% < SOC ≤ 70% | 48-bit | 6 B | **−25.0%** |
+| Critical-Power | SOC ≤ 30% | 40-bit | 5 B | **−37.5%** |
 
 > A matrix cell only needs 8 useful bits (values 0–255 for colliding drones). The remaining bits are **security padding** that SHADOW-Net scales dynamically.
 
 ---
 
-## 📊 Microbenchmark Results (§V-A)
+## Microbenchmark Results (§V-A)
 
 Empirical results from 30 iterations per tier with 3 warmup iterations:
 
@@ -172,7 +172,7 @@ Empirical results from 30 iterations per tier with 3 warmup iterations:
 
 ---
 
-## 🌐 Network Topology — OMNeT++ / INET (§III-A)
+## Network Topology — OMNeT++ / INET (§III-A)
 
 The `omnetpp/` directory contains the FANET simulation skeleton:
 
@@ -198,13 +198,13 @@ opp_run -r 0 -c HighPower -n .:$INET_ROOT/src omnetpp/omnetpp.ini
 
 ---
 
-## 🔒 Threat Model (§III-B)
+## Threat Model (§III-B)
 
 **Semi-Honest (Honest-but-Curious):** Logistics competitors strictly follow the collision avoidance protocol but attempt to infer proprietary routing intelligence by analyzing intercepted SMPC matrices over the wireless medium.
 
 ---
 
-## 📚 References
+## References
 
 1. G. Ding et al., "Routing with Privacy for Drone Package Delivery Systems," *ICRAT*, 2022.
 2. A. R. Svaigen et al., "MixDrones: A Mix Zones-based Location Privacy Protection Mechanism for the Internet of Drones," *MSWiM '21*, 2021.
@@ -214,13 +214,13 @@ opp_run -r 0 -c HighPower -n .:$INET_ROOT/src omnetpp/omnetpp.ini
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 👤 Author
+## Author
 
 **Amauri Ribeiro** — [@Ribeirosk8](https://github.com/Ribeirosk8)
 
